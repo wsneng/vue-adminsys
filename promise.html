@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // resolve reject all race
+    let promise= new Promise((resolve,reject) => {
+        resolve("成功传参")
+    })
+    // then  catch
+    promise.then(re=>{
+        console.log('11');
+        console.log(re);
+    }).catch(err=>{
+        console.log('22');
+        console.log(err);
+    })
+
+    //链式
+    function promise1(status){
+        return new Promise((resolve,reject)=>{
+            status === true ?  resolve("promise1成功") : reject("promise1失败")
+
+        })
+    }
+    promise1(true).then(re=>{
+        console.log(re);
+    }).catch(err=>{
+        console.log(err);
+    })
+
+    function promise2(status){
+        return new Promise((resolve,reject)=>{
+            status === true ?  resolve("promise2成功") : reject("promise2失败")
+
+        })
+    }
+
+    function promise3(status){
+        return new Promise((resolve,reject)=>{
+            status === true ?  resolve("promise3成功") : reject("promise3失败")
+
+        })
+    }
+
+    // promise2(true).then(re=>{
+    //    promise1(false).then(res=>{
+    //        console.log(res);
+    //    }).catch(error=>{
+    //        console.log(error);
+    //    })
+    // }).catch(err=>{
+    //     console.log(err);
+    // })
+
+    promise1(false).then(res=>{
+        console.log(res);
+        return promise2(true)
+    }).then(r=>{
+        console.log(r);
+        return promise1(true)
+    }).then(ree=>{
+        console.log(ree);
+        return promise3(true)
+    }).catch(e=>{
+        console.log(e);
+    })
+
+    //all  数组形式调用，但此数组内的各元素promise必须要全部调用成功，才会执行then == resolve回调
+    // 只要其中有一个失败就会都失败
+    Promise.all([promise1(true),promise2(true)]).then(re=>{
+        console.log('全部调用成功');
+        console.log(re);
+    }).catch(err=>{
+        console.log('有些可能调用失败');
+        console.log(err);
+    })
+
+    // race 数组，  当执行的时候，遇到的返回结果是resolve,那么就会继续链式执行
+    // 最终的理解 race只要有一个为resolve就会调用then，但是如果第一个返回的是reject，那么调用catch
+    //
+    Promise.race([promise1(true),promise2(true),promise3(false)]).then(re=>{
+        console.log('全调用成功');
+        console.log(re);
+    }).catch(err=>{
+        console.log('可能调用失败');
+        console.log(err);
+    })
+
+</script>
+
+</body>
+</html>
