@@ -2,7 +2,7 @@ import axios from "axios";
 import {ElMessage} from 'element-plus'
 
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api'
-// 2351715678@qq.com
+
 //创建axios
 const service = axios.create({
   baseURL: BASEURL + '/vue_admin_api/',   //微服务名    http://192.168.31.112:8080/api/vue_admin_api/getSms == http://old.web-jshtml.cn/vue_admin_api/getSms
@@ -19,7 +19,7 @@ service.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   // 后台需要前端这边传相关的参数  (在请求头添加参数)
   // tokey  userid sui
-  console.log(config.headers);
+  // console.log(config.headers);
   //业务需求
 
   //

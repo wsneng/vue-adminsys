@@ -22,7 +22,21 @@ const routes = [
   {
     path:'/login',
     name:'login',
-    component:()=> import('../views/login/index')  }
+    component:()=> import('../views/login/index')
+  },
+  {
+    path:'/console',   // 不区分大写
+    name:'Console',
+    redirect: 'Index',
+    component:()=> import('../views/Layout/index'),
+    children: [
+      {
+        path: '/index',
+        name: 'Index',
+        component:()=>import('../views/Console/index')
+      }
+    ]
+  }
 ]
 
 const router = createRouter({

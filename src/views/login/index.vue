@@ -7,7 +7,7 @@
         </li>
       </ul>
       <!--      表单-->
-        <el-form ref="ruleForm2" :model="ruleForm" status-icon :rules="rules"  class="login-form" size="medium">
+      <el-form ref="ruleForm2" :model="ruleForm" status-icon :rules="rules"  class="login-form" size="medium">
         <el-form-item prop="userName" class="item-from">
           <label for="userName">邮箱</label>
           <el-input id="userName" type="text" v-model="ruleForm.userName" autocomplete="off"></el-input>
@@ -47,6 +47,8 @@ import { stripscript,regPwd,regCode,regEmail } from "../../utils/validate";
 import { reactive,ref,isRef,toRefs,onMounted,watch} from 'vue';
 import axios from "axios";
 import {GetSms,GetRegister,GetLogin} from '../../api/login'
+import { useRouter} from 'vue-router'
+import {useStore} from 'vuex'     // 引入vuex对象
 import { ElMessage,ElNotification } from 'element-plus'
 
 
@@ -56,8 +58,10 @@ import { ElMessage,ElNotification } from 'element-plus'
 
 export default {
   name: "index",
-  setup(props, {attrs,emit}) {
+  setup(props, context) {
     // console.log(attrs);
+    const router = useRouter()   // 在setup中创建router的变量
+    const store = useStore()   // 在setup中创建vuex的对象
     const ruleForm2 = ref(null)
     //验证码按钮禁用状态
     const CodeButtonStatus = ref(false)
@@ -71,10 +75,10 @@ export default {
 
     //验证码按钮的文字
     const codeButtonContext = ref('获取验证码')
-   /* const codeButtonStatus1 = reactive({
-      status:false,
-      text:'获取验证码'
-    })*/
+    /* const codeButtonStatus1 = reactive({
+       status:false,
+       text:'获取验证码'
+     })*/
 
     //
     const time =ref('')
@@ -107,7 +111,7 @@ export default {
     //验证重复密码
     let validatePassWords = (rule,value,callback) =>{
       if(model.value === 'login'){
-          callback();
+        callback();
       }
       //过滤后的数据
       ruleForm.passwords  = stripscript(value);
@@ -121,7 +125,7 @@ export default {
       }
     };
     //验证码
-     let validateCode = (rule, value, callback) => {
+    let validateCode = (rule, value, callback) => {
       if (!value) {
         // CodeButtonStatus.value = true;
         callback(new Error('请输入验证码'));
@@ -159,13 +163,13 @@ export default {
 
     //表单的数据
     const ruleForm = reactive({
-        // userName: '',
-        userName: '235171@qq.com',
-        // password: '',
-        password: 'qwe123',
-        passwords:'',
-        code: ''
-      })
+      // userName: '',
+      userName: '2351715@qq.com',
+      // password: '',
+      password: 'qwe123',
+      passwords:'',
+      code: ''
+    })
 
     //表单失焦规则验证
     const rules = reactive({
@@ -192,24 +196,24 @@ export default {
      */
     const getSms = (()=>{
       if(ruleForm.userName === ''){
-      ElMessage({
+        ElMessage({
           message: '邮箱不能为空！！！',
           type: 'error',
         })
-      return false;
-    }
-    if(!regEmail(ruleForm.userName)){
-      ElMessage({
-        message: '邮箱格式有错误！！！',
-        type: 'error',
-      })
-      return false;
-    }
+        return false;
+      }
+      if(!regEmail(ruleForm.userName)){
+        ElMessage({
+          message: '邮箱格式有错误！！！',
+          type: 'error',
+        })
+        return false;
+      }
 
-    const requestData = reactive({
-      userName:ruleForm.userName,
-      module: model.value === 'login' ? 'login' : 'register'
-    })
+      const requestData = reactive({
+        userName:ruleForm.userName,
+        module: model.value === 'login' ? 'login' : 'register'
+      })
       setTimeout(()=>{
         GetSms(requestData).then((re) =>{
           // isLoadingStatus.value = true
@@ -273,12 +277,12 @@ export default {
      * 切换菜单
      */
     const toggleMenu = (item => {
-     /* 解构  可变形参  不定参数
-     const {...a} = toRefs(ruleForm)
-      a.userName.value = ''
-      a.password.value = ''
-      a.passwords.value = ''
-      a.code.value = ''*/
+      /* 解构  可变形参  不定参数
+      const {...a} = toRefs(ruleForm)
+       a.userName.value = ''
+       a.password.value = ''
+       a.passwords.value = ''
+       a.code.value = ''*/
       // ruleForm.userName ='';
       // ruleForm.password ='';
       // ruleForm.passwords ='';
@@ -308,46 +312,48 @@ export default {
     /**
      *  提交表单
      */
-    // 表单的方法
+      // 表单的方法
     const submitForm = (formName =>{
-      // console.log(ruleForm2.value);
+        // console.log(ruleForm2.value);
         // context.refs[formName].validate((valid) => {
         // 验证邮箱密码格式
         ruleForm2.value.validate((valid) => {
           if (valid) {
             let RegisterData = {
-            userName:ruleForm.userName.toString(),
-            password:sha1(ruleForm.password.toString()),
-            code: ruleForm.code.toString()
+              userName:ruleForm.userName.toString(),
+              password:sha1(ruleForm.password.toString()),
+              code: ruleForm.code.toString()
             }
-
-          const obj = model.value == 'login' ?  GetLogin(RegisterData) :  GetRegister(RegisterData);
+            const obj = model.value == 'login' ?  GetLogin(RegisterData) :  GetRegister(RegisterData);
             obj.then((re)=>{
-            ElMessage({
-              showClose: true,
-              message: re.data.message,
-              type: 'success',
+              ElMessage({
+                showClose: true,
+                message: re.data.message,
+                type: 'success',
+              })
+              clearInterval(time.value)
+              codeButtonContext.value = '获取验证码'
+              isLoadingStatus.value = false
+              CodeButtonStatus.value = false
+              model.value = 'login'
+              toggleMenu(menuTab[0]);
+              /* ruleForm2.value.resetFields();
+               if(model.value === 'register'){
+                // 自动跳转登录页面
+                for(const menuTabKey in menuTab ){
+                  if(menuTab[menuTabKey].text=='登录'){
+                    menuTab[menuTabKey].current = true
+                  }
+                }
+              }*/
+
+
+              if (model.value === 'login') {
+                router.push('/Console')
+              }
+            }).catch((err)=>{
+              console.log(err);
             })
-            clearInterval(time.value)
-
-            codeButtonContext.value = '获取验证码'
-            isLoadingStatus.value = false
-            CodeButtonStatus.value = false
-            model.value = 'login'
-            toggleMenu(menuTab[0]);
-
-           /* ruleForm2.value.resetFields();
-            if(model.value === 'register'){
-             // 自动跳转登录页面
-             for(const menuTabKey in menuTab ){
-               if(menuTab[menuTabKey].text=='登录'){
-                 menuTab[menuTabKey].current = true
-               }
-             }
-           }*/
-           }).catch((err)=>{
-             console.log(err);
-           })
           } else {
             console.log('error submit!!');
             return false;
