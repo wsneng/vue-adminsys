@@ -1,75 +1,60 @@
 <template>
   <div id="nav-wrap">
-    <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-      <el-radio-button :label="false">expand</el-radio-button>
-      <el-radio-button :label="true">collapse</el-radio-button>
-    </el-radio-group>
     <el-menu
-      default-active="2"
+      default-active="1"
+      unique-opened
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
       @open="handleOpen"
       @close="handleClose"
+      text-color="#fff"
+      active-text-color="#fff"
+      background-color="transparent"
+      router
     >
-      <el-sub-menu index="1">
-        <template #title>
-          <el-icon><location /></el-icon>
-          <span>Navigator One</span>
-        </template>
-        <el-menu-item-group>
-          <template #title><span>Group One</span></template>
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title><span>item four</span></template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
+      <template v-for="(item,index) in rooters" >
+        <el-sub-menu :key="index" :index="item.path" v-if="item.hidden">
+          <template #title>
+            <el-icon><location/></el-icon>
+            <span style="font-size: 14px">{{item.meta.name}}</span>
+          </template>
+          <el-menu-item-group v-for="(Childitem,Childindex) in item.children" :key="Childindex">
+            <el-menu-item :index="Childitem.path" style="font-size: 8px">
+              <div style="width: 16px;height: 16px" > <i  v-html="Childitem.meta.icon"></i> {{Childitem.meta.name}}</div>
+
+            </el-menu-item>
+          </el-menu-item-group>
         </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>Navigator Two</template>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <template #title>Navigator Three</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
+      </template>
     </el-menu>
+    <SvgIcon1></SvgIcon1>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import {
-  Location,
-  Document,
-  Menu as IconMenu,
-  Setting,
-} from '@element-plus/icons'
+import { reactive,ref,isRef, } from 'vue'
+import { Location, } from '@element-plus/icons'
+import { useRouter,useRoute} from 'vue-router'
 export default {
   name: "Nav",
   components: {
-    Location,
-    Document,
-    Setting,
-    IconMenu,
+    Location
   },
-  setup() {
-    const isCollapse = ref(true)
+  setup(props,context) {
+    const rooter = new useRouter()
+    const rooters = reactive(rooter.options.routes);
+    const root = new useRoute()
+    const isCollapse = ref(false)
+    // console.log(rooter.options.routes)
+
     const handleOpen = (key, keyPath) => {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     }
     const handleClose = (key, keyPath) => {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     }
     return {
+      rooters,
       isCollapse,
       handleOpen,
       handleClose,
@@ -77,15 +62,14 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "src/styles/config";
+@import "src/styles/elementUi";
 #nav-wrap{
   width: $navMenu;
   height: 100vh;
   background-color: #344a5f;
 }
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
+
+
 </style>

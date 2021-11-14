@@ -289,7 +289,7 @@ export default {
       // ruleForm.code ='';
       // element 重置表单
       ruleForm2.value.resetFields()
-      //按钮置灰
+      // 按钮置灰
       regEmail(ruleForm.userName) ? CodeButtonStatus.value = false : CodeButtonStatus.value = true;
       regCode(ruleForm.code) ? loginButtonStatus.value = false : loginButtonStatus.value = true;
       // 切换菜单验证码的重置
@@ -349,7 +349,16 @@ export default {
 
 
               if (model.value === 'login') {
-                router.push('/Console')
+                // 路由跳转及传参（传参对象为对象）
+                // let obj = {
+                //   name:'wsn',
+                //   age:21
+                // }
+                // let strItem = JSON.stringify(obj)
+                // router.push({path:'/Console',query:{id:encodeURIComponent(strItem)} } )
+                router.push({path:'/Console'})
+
+                // router.push('/Console')
               }
             }).catch((err)=>{
               console.log(err);
@@ -359,7 +368,6 @@ export default {
             return false;
           }
         });
-
       })
     /**
      * 生命周期

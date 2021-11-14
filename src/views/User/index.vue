@@ -1,5 +1,7 @@
 <template>
-
+  <div>
+    用户index
+  </div>
 </template>
 
 <script>
