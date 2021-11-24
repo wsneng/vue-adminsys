@@ -38,7 +38,6 @@ const routes = [
     meta:{
       name:"控制台",
       icon:"Console"
-      // icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
     },
     component:Layout,
     children: [
@@ -48,7 +47,7 @@ const routes = [
         name: 'Index',
         meta:{
           name:"首页",
-          icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
+          icon:"Home"
         },
         component:()=>import('../views/Console/index')
       }
@@ -64,7 +63,7 @@ const routes = [
     hidden: true,
     meta:{
       name:"信息管理",
-      icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
+      icon:"InfoManage"
     },
     component:Layout,
     children: [
@@ -74,7 +73,7 @@ const routes = [
         name: 'InfoIndex',
         meta:{
           name:"信息列表",
-          icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
+          icon: "InfoList"
         },
         component:()=>import('../views/Info/index')
       },
@@ -83,8 +82,8 @@ const routes = [
         path: '/infoCategory',
         name: 'InfoCategory',
         meta:{
-          name:"信息分类",
-          icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
+          name: "信息分类",
+          icon: "InfoCategory"
         },
         component:()=>import('../views/Info/Category')
       }
@@ -100,8 +99,7 @@ const routes = [
     hidden: true,
     meta:{
       name:"用户管理",
-      // icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
-
+      icon:"UserManage"
     },
     component:Layout,
     children: [
@@ -111,7 +109,7 @@ const routes = [
         name: 'UserIndex',
         meta:{
           name:"用户列表",
-          icon:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" data-v-394d1fd8=\"\"><path fill=\"currentColor\" d=\"M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z\"></path></svg>"
+          icon:"UserIndex"
         },
         component:()=>import('../views/User/index')
       }
