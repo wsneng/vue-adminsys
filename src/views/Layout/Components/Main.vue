@@ -17,7 +17,7 @@ export default {
   /*left: 250px;*/
   /*right: 0px;*/
   width: 98%;
-  height: 90vh;
+  height: 89vh;
   padding: 0px;
   margin:15px 15px 0px 15px;
   border-bottom: none;

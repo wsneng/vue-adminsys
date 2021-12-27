@@ -1,3 +1,10 @@
 @import "normalize";
 @import "config";
 @import "elementUi";
+
+.pull_left{
+  float: left;
+}
+.pull-right{
+  float: right;
+}
