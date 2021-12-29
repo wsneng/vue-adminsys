@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container id="layout">
+    <el-container id="layout" :class="[menuStatus ? 'close' : 'open']">
       <el-aside width="250px">
         <Nav/>
       </el-aside>
@@ -21,7 +21,9 @@
 import Nav from './Components/Nav'
 import Header from './Components/Header'
 import Main from './Components/Main'
-
+import {useStore} from 'vuex'
+import {computed} from "vue";
+import app from "../../store/app";
 export default {
   name: "index",
   components:{
@@ -30,7 +32,11 @@ export default {
     Main
   },
   setup(){
-
+    const store = new useStore();
+    const menuStatus = computed(()  => store.state.app.isCollapse );
+    return {
+      menuStatus,
+    }
   }
 }
 </script>
@@ -41,16 +47,19 @@ export default {
   background-color: #ffffff;
 }
 .el-header{
-  padding: 0px;
-  //width: ;
-  //padding-left: 0px;
-  //padding-right: 0px;
+  padding: 0;
 }
 .el-aside{
   width: $navMenu;
 }
-.el-main{
-  padding: 0px;
+.el-main {
+  padding: 0;
   margin: 0;
+}
+.close{
+  .el-aside{
+    @include webkit(transition,all .3s ease 0s);
+    width: $navMenuMin;
+  }
 }
 </style>

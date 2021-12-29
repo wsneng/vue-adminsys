@@ -5,14 +5,32 @@
     background-color: rgba(245,108,108,0.2)  !important;
   }
 }
-
-// 一级菜单样式修改
-//li.el-sub-menu {
-//  &.is-active .is-opened .el-sub-menu__title {
-//    background-color: red  !important;
-//  }
-//}
-
+//一级菜单样式修改
 li.el-sub-menu.is-active.is-opened .el-sub-menu__title{
+  background-color: $mainColor  !important;
+
+}
+.el-menu-item-group__title{
+  padding: 0;
+}
+.close{
+  .el-sub-menu.is-opened .el-sub-menu__title{
     background-color: $mainColor  !important;
+  }
+
+}
+.el-menu--vertical{
+  .el-menu{
+    background-color: #8A8A8A  !important;
+  }
+  .el-menu--popup{
+    padding: 0;
+  }
+  .el-menu-item{
+    line-height: 50px;
+    height: 50px;
+  }
+  .el-menu-item:hover{
+    background-color: $mainColor  !important;
+  }
 }

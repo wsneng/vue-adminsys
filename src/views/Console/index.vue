@@ -6,7 +6,6 @@
 
 <script>
 import { useRouter,useRoute} from 'vue-router'
-import { getCurrentInstance } from 'vue'
 import { onMounted} from 'vue';
 export default {
   name: "index",

@@ -319,13 +319,14 @@ export default {
         // 验证邮箱密码格式
         ruleForm2.value.validate((valid) => {
           if (valid) {
-            let RegisterData = {
+            let UserData = {
               userName:ruleForm.userName.toString(),
               password:sha1(ruleForm.password.toString()),
               code: ruleForm.code.toString()
             }
-            const obj = model.value == 'login' ?  GetLogin(RegisterData) :  GetRegister(RegisterData);
-            obj.then((re)=>{
+            const obj = model.value == 'login' ? store.dispatch('login',UserData) : store.dispatch('register',UserData);
+            obj.then(re=>{
+              console.log(re);
               ElMessage({
                 showClose: true,
                 message: re.data.message,
@@ -335,34 +336,46 @@ export default {
               codeButtonContext.value = '获取验证码'
               isLoadingStatus.value = false
               CodeButtonStatus.value = false
-              model.value = 'login'
-              toggleMenu(menuTab[0]);
-              /* ruleForm2.value.resetFields();
-               if(model.value === 'register'){
-                // 自动跳转登录页面
-                for(const menuTabKey in menuTab ){
-                  if(menuTab[menuTabKey].text=='登录'){
-                    menuTab[menuTabKey].current = true
-                  }
-                }
-              }*/
 
 
               if (model.value === 'login') {
-                // 路由跳转及传参（传参对象为对象）
-                // let obj = {
-                //   name:'wsn',
-                //   age:21
-                // }
-                // let strItem = JSON.stringify(obj)
-                // router.push({path:'/Console',query:{id:encodeURIComponent(strItem)} } )
                 router.push({path:'/Console'})
-
-                // router.push('/Console')
               }
+              model.value = 'login'
+              toggleMenu(menuTab[0]);
             }).catch((err)=>{
               console.log(err);
             })
+            /* const obj = model.value == 'login' ?  GetLogin(RegisterData) :  GetRegister(RegisterData);
+             obj.then((re)=>{
+               ElMessage({
+                 showClose: true,
+                 message: re.data.message,
+                 type: 'success',
+               })
+               clearInterval(time.value)
+               codeButtonContext.value = '获取验证码'
+               isLoadingStatus.value = false
+               CodeButtonStatus.value = false
+               model.value = 'login'
+               toggleMenu(menuTab[0]);
+
+
+
+               if (model.value === 'login') {
+                 // 路由跳转及传参（传参对象为对象）
+                 // let obj = {
+                 //   name:'wsn',
+                 //   age:21
+                 // }
+                 // let strItem = JSON.stringify(obj)
+                 // router.push({path:'/Console',query:{id:encodeURIComponent(strItem)} } )
+                 router.push({path:'/Console'})
+                 // router.push('/Console')
+               }
+             }).catch((err)=>{
+               console.log(err);
+             })*/
           } else {
             console.log('error submit!!');
             return false;
