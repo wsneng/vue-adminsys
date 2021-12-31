@@ -25,12 +25,9 @@ export function GetSms(data){
 export function GetLogin(data){
   return request.request({
     method: 'post',
-    url: '/login/',    // 接口名
+    url: '/token/login/',    // 接口名
     // ES6写法  key=value   data
     data:{
-      // 'userName':data.userName,
-      // 'password':data.password,
-      // 'code': data.code
       "username":data.userName,
       "password":data.password,
       "code":data.code
@@ -47,9 +44,6 @@ export function GetRegister(data){
     url: '/register/',    // 接口名
     // ES6写法  key=value   data
     data:{
-      // 'userName':data.userName,
-      // 'password':data.password,
-      // 'code': data.code
       "username":data.userName,
       "password":data.password,
       "code":data.code

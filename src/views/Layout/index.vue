@@ -23,7 +23,7 @@ import Header from './Components/Header'
 import Main from './Components/Main'
 import {useStore} from 'vuex'
 import {computed} from "vue";
-import app from "../../store/app";
+import app from "../../store/modules/app";
 export default {
   name: "index",
   components:{

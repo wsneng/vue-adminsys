@@ -34,7 +34,7 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="submitForm('ruleForm2')" class="login-btn block" :disabled="loginButtonStatus">{{ model === 'login' ? "登录" : "注册" }}</el-button>
+          <el-button type="danger" @click="submitForm()" class="login-btn block" :disabled="loginButtonStatus" >{{ model === 'login' ? "登录" : "注册" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -44,13 +44,12 @@
 //引入方式
 import sha1 from 'js-sha1'
 import { stripscript,regPwd,regCode,regEmail } from "../../utils/validate";
-import { reactive,ref,isRef,toRefs,onMounted,watch} from 'vue';
-import axios from "axios";
-import {GetSms,GetRegister,GetLogin} from '../../api/login'
+import { reactive,ref,onMounted,watch} from 'vue';
+
 import { useRouter} from 'vue-router'
 import {useStore} from 'vuex'     // 引入vuex对象
 import { ElMessage,ElNotification } from 'element-plus'
-
+import cookie from "cookie_js";
 
 // default直接用名字，只暴露一个
 // import {test2} from "../../utils/request"
@@ -187,9 +186,6 @@ export default {
         {validator: validateCode, trigger: 'blur'}
       ]
     })
-    /**
-     * 声明函数
-     */
 
     /**
      * 获取验证码
@@ -209,18 +205,16 @@ export default {
         })
         return false;
       }
-
       const requestData = reactive({
         userName:ruleForm.userName,
         module: model.value === 'login' ? 'login' : 'register'
       })
       setTimeout(()=>{
-        GetSms(requestData).then((re) =>{
+        store.dispatch('login/getCode',requestData).then((re) =>{
           // isLoadingStatus.value = true
           codeButtonContext.value = '发送中'
           CodeInputStatus.value = false;
           TimeCode()
-
           // 延迟器
           setTimeout(()=>{
             ElMessage({
@@ -228,7 +222,6 @@ export default {
               message: '邮箱发送成功！！！',
               type: 'success',
             })
-
             ElNotification({
               title: re.data.message.substring(0,7),
               message:  re.data.message.substring(7,re.data.message.length),
@@ -236,19 +229,13 @@ export default {
               duration: 3000,
               offset:250
             })
-
             CodeButtonStatus.value = true
-
           },2000)
-
           CodeInputStatus.value = false
-          // console.log(re);
-          // if(re.data.length > 8){
-          //   loginButtonStatus.value = false;
-          // }
         }).catch((error) =>{
           console.log(error);
         });
+
       },1500)
 
     });
@@ -283,10 +270,7 @@ export default {
        a.password.value = ''
        a.passwords.value = ''
        a.code.value = ''*/
-      // ruleForm.userName ='';
-      // ruleForm.password ='';
-      // ruleForm.passwords ='';
-      // ruleForm.code ='';
+
       // element 重置表单
       ruleForm2.value.resetFields()
       // 按钮置灰
@@ -313,7 +297,7 @@ export default {
      *  提交表单
      */
       // 表单的方法
-    const submitForm = (formName =>{
+    const submitForm = (() =>{
         // console.log(ruleForm2.value);
         // context.refs[formName].validate((valid) => {
         // 验证邮箱密码格式
@@ -324,9 +308,8 @@ export default {
               password:sha1(ruleForm.password.toString()),
               code: ruleForm.code.toString()
             }
-            const obj = model.value == 'login' ? store.dispatch('login',UserData) : store.dispatch('register',UserData);
+            const obj = model.value == 'login' ? store.dispatch('login/login',UserData) : store.dispatch('login/register',UserData);
             obj.then(re=>{
-              console.log(re);
               ElMessage({
                 showClose: true,
                 message: re.data.message,
@@ -346,36 +329,7 @@ export default {
             }).catch((err)=>{
               console.log(err);
             })
-            /* const obj = model.value == 'login' ?  GetLogin(RegisterData) :  GetRegister(RegisterData);
-             obj.then((re)=>{
-               ElMessage({
-                 showClose: true,
-                 message: re.data.message,
-                 type: 'success',
-               })
-               clearInterval(time.value)
-               codeButtonContext.value = '获取验证码'
-               isLoadingStatus.value = false
-               CodeButtonStatus.value = false
-               model.value = 'login'
-               toggleMenu(menuTab[0]);
 
-
-
-               if (model.value === 'login') {
-                 // 路由跳转及传参（传参对象为对象）
-                 // let obj = {
-                 //   name:'wsn',
-                 //   age:21
-                 // }
-                 // let strItem = JSON.stringify(obj)
-                 // router.push({path:'/Console',query:{id:encodeURIComponent(strItem)} } )
-                 router.push({path:'/Console'})
-                 // router.push('/Console')
-               }
-             }).catch((err)=>{
-               console.log(err);
-             })*/
           } else {
             console.log('error submit!!');
             return false;
@@ -396,6 +350,14 @@ export default {
         regEmail(ruleForm.userName) ? CodeButtonStatus.value = false : CodeButtonStatus.value = true
       }
       regCode(ruleForm.code) ? loginButtonStatus.value = false : loginButtonStatus.value = true
+    })
+
+    // 回车登录事件
+    document.addEventListener('keydown', (e) => {
+      let key = window.event.keyCode;
+      if (key == 13) {
+         submitForm();
+      }
     })
     return{
       codeButtonContext,

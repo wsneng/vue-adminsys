@@ -3,8 +3,8 @@
     <div class="pull_left header-icon" @click="navMenuState()"> <svg-icon iconClass="list" className="list"></svg-icon></div>
     <div class="pull-right">
       <img :src="User_Img" class="pull_left user-img" alt=""/>
-      <div class="userInfo pull_left"> 管理员 </div>
-      <div class="header-icon pull_left"><svg-icon iconClass="quit" className="quit"></svg-icon></div>
+      <div class="userInfo pull_left"> {{ userName }} </div>
+      <div class="header-icon pull_left"><svg-icon iconClass="quit" className="quit" @click="quitLogin()"></svg-icon></div>
     </div>
   </div>
 </template>
@@ -13,6 +13,8 @@
 import SvgIcon from "../../../Icons/SvgIcon";
 import userImg from "../../../Icons/svg/1.png"
 import {useStore} from 'vuex'
+import {useRouter} from 'vue-router'
+import {computed} from "vue";
 export default {
   name: "Header",
   components: {SvgIcon},
@@ -21,16 +23,22 @@ export default {
     const User_Img = userImg;
     // vuex
     const store = new useStore();
-
+    const router = new useRouter();
     const navMenuState = () =>{
-      store.commit('SET_Collapse');
+      store.commit('app/SET_Collapse');
       // store.dispatch("setMenuStatus","222");
     };
 
+    const userName = computed(() => store.state.login.userName);
 
+    const quitLogin = (()=>{
+      router.push({path:'/login'})
+    })
     return {
       User_Img,
-      navMenuState
+      navMenuState,
+      userName,
+      quitLogin
     }
   }
 }

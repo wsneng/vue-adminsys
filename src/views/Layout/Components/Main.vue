@@ -1,21 +1,19 @@
 <template>
   <el-card class="box-card" id="main-wrap">
-    {{bbb}}
     <router-view/>
   </el-card>
 </template>
 
 
 <script>
-import {useStore} from "vuex"
+import {useStore} from "vuex"   // 引入vuex对象
 export default {
   name: "Main",
   setup(){
-    const store = new useStore();
-    const bbb = store.state.login.str;
+    const store = new useStore();   // 在setup中创建vuex的对象
 
     return{
-      bbb
+
     }
   }
 }

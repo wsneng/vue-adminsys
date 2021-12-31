@@ -12,7 +12,7 @@
       router
     >
       <!-- router  是否启用 vue-router 模式。 启用该模式会在激活导航时以 index 作为 path 进行路由跳转-->
-      <template v-for="(item,index) in rooters" >
+      <template v-for="(item,index) in routers" >
         <el-sub-menu :key="index" :index="item.path" v-if="item.hidden">
           <template #title>
             <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon"></svg-icon>
@@ -39,7 +39,7 @@ export default {
   components: {SvgIcon},
   setup() {
     const rooter = new useRouter();
-    const rooters = reactive(rooter.options.routes);
+    const routers = reactive(rooter.options.routes);
     // 取参数
     const root = new useRoute();
     // vuex
@@ -53,7 +53,7 @@ export default {
     // const isCollapse = ref(false)
     const isCollapse = computed(() => store.state.app.isCollapse);
     return {
-      rooters,
+      routers,
       isCollapse,
     }
   },

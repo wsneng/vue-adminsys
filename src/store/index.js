@@ -1,9 +1,9 @@
 import { createStore } from 'vuex'
-import app from "./app"
-import login from "./login"
+import app from "./modules/app"
+import login from "./modules/login"
 export default createStore({
   modules: {
     app,
-    login
+    login,
   }
 })
